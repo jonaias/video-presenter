@@ -9,105 +9,19 @@
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-
+    <link rel="stylesheet" type="text/css" href="index.css">
   </head>
   <body  onkeyup="keyUp(event)">
     <video id="presentation-video" src="video.mp4" controls>
       Your browser does not support the <code>video</code> element.
     </video>
-    <h2 id="title-x">Slide</h2>
+    <h2 id="title-x"></h2>
     <h4> Press keyboard left arrow to start </h4>
     <h4> Keyboard left arrow: Previous slide</h4>
     <h4> Keyboard right arrow: Next slide</h4>
     <h4> Spacebar: Stop (To resume, use keyboard arrows)</h4>
     <h6> Video Presenter © 2016 <a href="jonaias.info">jonaias.info</a></h6>
-
-
-
-      <script>
-      var currentTimeout;
-          var currentPart = 0;
-
-          var video = document.getElementById('presentation-video');
-
-          var videoParts = [];
-          videoParts.push({start:0,end:10,type:"PLAY"});
-          videoParts.push({start:10,duration:5,type:"HOLD"});
-          videoParts.push({start:10,end:20,type:"PLAY"});
-          videoParts.push({start:20,duration:3,type:"HOLD"});
-          videoParts.push({start:20,end:30,type:"PLAY"});
-
-          function executePart(){
-              if(currentPart<0){
-                  currentPart=0;
-              }
-              else if(currentPart > videoParts.length-1){
-                  currentPart = videoParts.length-1;
-                  return;
-              }
-              if (videoParts[currentPart].type == "PLAY"){
-                  video.currentTime = videoParts[currentPart].start;
-                  video.play();
-                  currentTimeout = setTimeout(function(){
-                    video.pause();
-                    currentPart++;
-                    if(currentPart<videoParts.length){
-                      executePart();
-                    }
-                   },  (videoParts[currentPart].end - videoParts[currentPart].start)*1000);
-              }
-              else if (videoParts[currentPart].type == "HOLD"){
-                video.currentTime = videoParts[currentPart].start;
-                video.pause();
-                currentTimeout = setTimeout(function(){
-                  video.pause();
-                  currentPart++;
-                  if(currentPart<videoParts.length){
-                    executePart();
-                  }
-                },  (videoParts[currentPart].duration)*1000);
-              }
-          }
-
-          setInterval(function() {
-            var v = document.getElementById('title-x');
-            var duration = 0;
-            if (videoParts[currentPart].type == "PLAY"){
-              duration = videoParts[currentPart].end - videoParts[currentPart].start;
-            }
-            else if (videoParts[currentPart].type == "HOLD"){
-              duration = videoParts[currentPart].duration;
-            }
-
-            v.innerHTML = 'Slide:'+ currentPart + ' Duration:'+
-            (video.currentTime-videoParts[currentPart].start).toFixed(2) +'/'+duration.toFixed(2);
-          }, 100);
-
-          function keyUp (event) {
-            var key = event.keyCode || event.which;
-            if (key==37){
-              console.log("Previous");
-              if (currentTimeout){
-                clearTimeout(currentTimeout);
-              }
-              currentPart--;
-              executePart();
-            }
-            if (key==39){
-              console.log("Next");
-              if (currentTimeout){
-                clearTimeout(currentTimeout);
-              }
-              currentPart++;
-              executePart();
-            }
-            if (key==32){
-                video.pause();
-                clearTimeout(currentTimeout);
-            }
-          }
-      </script>
-
+    <script src="index.js"></script>
   </body>
 
 </html>
