@@ -48,6 +48,9 @@ setInterval(function() {
   v.innerHTML = 'Slide:'+ currentPart + ' Duration:'+
   (video.currentTime-videoParts[currentPart].start).toFixed(2) +'/'+
   videoParts[currentPart].duration.toFixed(2);
+
+  // var percent =((video.currentTime-videoParts[currentPart].start)/videoParts[currentPart].duration)*100;
+  //  $('.progress-bar').css('width', percent+'%');
 }, 200);
 
 function keyUp (event) {
