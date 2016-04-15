@@ -1,0 +1,124 @@
+<<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body  onkeyup="keyUp(event)">
+    <video id="presentation-video" src="video.mp4" controls>
+      Your browser does not support the <code>video</code> element.
+    </video>
+    <div>
+      <button onclick="document.getElementById('presentation-video').play()">Play the Audio</button>
+      <button onclick="document.getElementById('presentation-video').pause()">Pause the Audio</button>
+      <button onclick="document.getElementById('presentation-video').volume+=0.1">Increase Volume</button>
+      <button onclick="document.getElementById('presentation-video').volume-=0.1">Decrease Volume</button>
+    </div>
+    <h2 id="title-x">Slide</h2>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </body>
+
+  <script>
+      var videoParts = [];
+      videoParts.push({start:0,end:10,type:"PLAY"});
+      videoParts.push({start:10,duration:5,type:"HOLD"});
+      videoParts.push({start:10,end:20,type:"PLAY"});
+      videoParts.push({start:20,duration:3,type:"HOLD"});
+      videoParts.push({start:20,end:30,type:"PLAY"});
+
+      var currentPart = 0;
+
+      var video = document.getElementById('presentation-video');
+
+      var currentTimeout;
+
+      function executePart(){
+          if(currentPart<0){
+              currentPart=0;
+          }
+          else if(currentPart > videoParts.length-1){
+              currentPart = videoParts.length-1;
+              return;
+          }
+          if (videoParts[currentPart].type == "PLAY"){
+              video.currentTime = videoParts[currentPart].start;
+              video.play();
+              currentTimeout = setTimeout(function(){
+                video.pause();
+                currentPart++;
+                if(currentPart<videoParts.length){
+                  executePart();
+                }
+               },  (videoParts[currentPart].end - videoParts[currentPart].start)*1000);
+          }
+          else if (videoParts[currentPart].type == "HOLD"){
+            video.currentTime = videoParts[currentPart].start;
+            video.pause();
+            currentTimeout = setTimeout(function(){
+              video.pause();
+              currentPart++;
+              if(currentPart<videoParts.length){
+                executePart();
+              }
+            },  (videoParts[currentPart].duration)*1000);
+          }
+      }
+
+      executePart();
+
+      video.ontimeupdate = function() {
+        var v = document.getElementById('title-x');
+        var duration = 0;
+        if (videoParts[currentPart]== "PLAY"){
+          duration = videoParts[currentPart].end - videoParts[currentPart].start;
+        }
+        else if (videoParts[currentPart]== "HOLD"){
+          duration = videoParts[currentPart].duration;
+        }
+
+        v.innerHTML = 'Slide:'+ currentPart + ' Duration:'+
+        (video.currentTime-videoParts[currentPart].start) +'/'+duration;
+      };
+
+      function keyUp (event) {
+        var key = event.keyCode || event.which;
+        if (key==37){
+          console.log("Previous");
+          if (currentTimeout){
+            clearTimeout(currentTimeout);
+          }
+          currentPart--;
+          executePart();
+        }
+        if (key==39){
+          console.log("Next");
+          if (currentTimeout){
+            clearTimeout(currentTimeout);
+          }
+          currentPart++;
+          executePart();
+        }
+        if (key==32){
+            video.pause();
+            clearTimeout(currentTimeout);
+        }
+      }
+  </script>
+</html>
