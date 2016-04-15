@@ -9,6 +9,16 @@ videoParts.push({start:10,duration:5,type:"HOLD"});
 videoParts.push({start:10,duration:10,type:"PLAY"});
 videoParts.push({start:20,duration:3,type:"HOLD"});
 videoParts.push({start:20,duration:10,type:"PLAY"});
+videoParts.push({start:30,duration:2,type:"HOLD"});
+videoParts.push({start:30,duration:2,type:"PLAY"});
+videoParts.push({start:32,duration:2,type:"HOLD"});
+videoParts.push({start:32,duration:2,type:"PLAY"});
+videoParts.push({start:34,duration:2,type:"HOLD"});
+videoParts.push({start:34,duration:2,type:"PLAY"});
+videoParts.push({start:36,duration:2,type:"HOLD"});
+videoParts.push({start:36,duration:2,type:"PLAY"});
+videoParts.push({start:38,duration:2,type:"HOLD"});
+videoParts.push({start:38,duration:2,type:"PLAY"});
 
 function executePart(){
   if(currentPart<0){
